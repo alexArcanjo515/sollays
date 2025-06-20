@@ -1,0 +1,132 @@
+        .navbar {
+            background: linear-gradient(90deg, #18438f 40%, #2dbaee 100%) !important;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: logo-glow 2s infinite alternate;
+        }
+
+        @keyframes logo-glow {
+            0% {
+                text-shadow: 0 0 8px #2dbaee55, 0 0 2px #fff;
+            }
+
+            100% {
+                text-shadow: 0 0 18px #2dbaee, 0 0 8px #fff;
+            }
+        }
+
+        .dropdown-menu {
+            background: linear-gradient(90deg, #18438f 60%, #2dbaee 100%);
+            border-radius: 0 0 12px 12px;
+            min-width: 320px;
+        }
+
+        .dropdown-item {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background: #2dbaee;
+            color: #18438f;
+            border-radius: 20px;
+        }
+
+        .top-bar {
+            background: rgb(255, 255, 255);
+            color: #18438f;
+            font-size: 0.95rem;
+        }
+
+        .top-bar .container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 30px;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+        }
+
+        @media (min-width: 992px) { /* lg breakpoint */
+    .mt-lg-n30 {
+      margin-top: -350px !important;
+    }
+  }       @media (min-width: 992px) { /* lg breakpoint */
+    .mt-lg-np {
+      margin-top: -30px !important;
+    }
+  }@media (min-width: 992px) { /* lg breakpoint */
+    .mt-lg-nn30 {
+      margin-top: -230px !important;
+    }
+  }@media (min-width: 992px) { /* lg breakpoint */
+    .mt-lg-map{
+      margin-top: -250px !important;
+    }
+  }@media (min-width: 992px) { /* lg breakpoint */
+    .mt-lg-np30{
+      margin-top: -100px !important;
+    }
+  }@media (min-width: 992px) { /* lg breakpoint */
+    .mt-lg-map2{
+      float:right; margin-top:-700px !important;
+    }
+  }
+        /* Loader styles */
+        #loader-bg {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: #18438f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s;
+        }
+
+        #loader-bg.loaded {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #2dbaee;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Corrige overflow horizontal */
+        body {
+            overflow-x: hidden;
+        }
+
+        .container-fluid,
+        .row {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }

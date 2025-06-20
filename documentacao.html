@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentação Técnica e Autoria do Sistema</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+        .container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 16px #0001; padding: 32px; }
+        h1, h2 { color: #18438f; }
+        .campo { margin-bottom: 18px; }
+        label { font-weight: bold; color: #18438f; }
+        .valor { display: block; margin-top: 4px; font-size: 1.1em; color: #222; }
+        .assinatura { margin-top: 40px; }
+        .assinatura label { font-weight: normal; }
+        .selo { margin-top: 32px; text-align: center; color: #888; font-size: 0.95em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de Documentação Técnica</h1>
+        <h2>Sistema Web: Loja Virtual S.R.ENERGY</h2>
+        <div class="campo">
+            <label>Desenvolvedor Responsável:</label>
+            <span class="valor">Seu Nome Completo Aqui</span>
+        </div>
+        <div class="campo">
+            <label>E-mail do Desenvolvedor:</label>
+            <span class="valor">seuemail@dominio.com</span>
+        </div>
+        <div class="campo">
+            <label>Período de Desenvolvimento:</label>
+            <span class="valor">__/__/2024 até __/__/2025</span>
+        </div>
+        <div class="campo">
+            <label>Empresa/Cliente:</label>
+            <span class="valor">S.R.ENERGY</span>
+        </div>
+        <div class="campo">
+            <label>Descrição do Sistema:</label>
+            <span class="valor">
+                Sistema web completo para loja virtual de energia solar, incluindo cadastro de produtos, carrinho de cotação, histórico de compras, área do cliente, geração de PDF, integração com banco de dados MySQL, painel administrativo, e suporte ao cliente.
+            </span>
+        </div>
+        <div class="campo">
+            <label>Principais Tecnologias Utilizadas:</label>
+            <span class="valor">
+                PHP, MySQL, JavaScript, HTML5, CSS3, Bootstrap 5, FontAwesome, PHPMailer, jsPDF, html2canvas.
+            </span>
+        </div>
+        <div class="campo">
+            <label>Funcionalidades Implementadas:</label>
+            <ul class="valor">
+               
+                <li>Gestão de produtos e categorias</li>
+                <li>Carrinho de cotação com PDF automático</li>
+                <li>Solicitações de cotação e suporte ao cliente</li>
+                <li>Integração com e-mail e WhatsApp</li>
+            </ul>
+        </div>
+        <div class="campo">
+            <label>Banco de Dados:</label>
+            <span class="valor">MySQL - Estrutura disponível mediante solicitação.</span>
+        </div>
+        <div class="campo">
+            <label>Observações:</label>
+            <span class="valor">
+                Este documento comprova que o sistema foi desenvolvido integralmente pelo responsável acima, com código-fonte original e funcionalidades conforme solicitado pela empresa.
+            </span>
+        </div>
+        <div class="assinatura">
+            <label>Assinatura do Desenvolvedor:</label>
+            <div style="margin-top:40px; border-bottom:1px solid #222; width:250px;"></div>
+            <span style="font-size:0.95em; color:#888;">Data: ____/____/2025</span>
+        </div>
+        <div class="selo">
+            <hr>
+            <strong>Documento gerado automaticamente pelo sistema em <?= date('d/m/Y H:i') ?></strong>
+        </div>
+    </div>
+</body>
+</html>

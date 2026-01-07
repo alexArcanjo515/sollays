@@ -1,9 +1,10 @@
 <?php
-session_start();
-
-// Simulação de login (remova em produção)
-$_SESSION['usuario_id'] = 1;
-$_SESSION['usuario_email'] = 'cliente@exemplo.com';
+// Incluir arquivo de inicialização
+if (file_exists(__DIR__ . '/../templates/init.php')) {
+    include_once __DIR__ . '/../templates/init.php';
+} else {
+    session_start();
+}
 
 // Exemplo de produtos de baterias
 $baterias = [

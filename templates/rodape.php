@@ -1,49 +1,4 @@
- <section class="container-fluid py-5 px-3 px-lg-0" style="background: linear-gradient(120deg, #18438f 60%, #2dbaee 100%);">
-    <div class="row justify-left">
-        <div class="col-lg-7 col-md-10 col-12" data-aos="fade-up">
-            <div class=" rounded-4 shadow p-4 p-md-5">
-                <h2 class="fw-bold mb-4 text-center"
-                    style="font-size: 2rem; background: linear-gradient(90deg,rgb(255, 255, 255) 40%, #0096df 80%);
-                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;">
-                    <i class="fas fa-envelope-open-text me-2 text-primary"></i>Fale Conosco
-                </h2>
-                <form>
-                    <div class="mb-3">
-                        <label for="nome" class="form-label fw-semibold text-white">
-                            <i class="fas fa-user text-primary me-1"></i>Nome
-                        </label>
-                        <input type="text" class="form-control form-control-lg rounded-pill shadow-sm"
-                               id="nome" placeholder="Seu nome" required
-                               style="background: #f5f8ff; border: 1.5px solid #2dbaee;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label fw-semibold text-white">
-                            <i class="fas fa-at text-primary me-1"></i>E-mail
-                        </label>
-                        <input type="email" class="form-control form-control-lg rounded-pill shadow-sm"
-                               id="email" placeholder="seu@email.com" required
-                               style="background: #f5f8ff; border: 1.5px solid #2dbaee;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="mensagem" class="form-label fw-semibold text-white">
-                            <i class="fas fa-comment-dots text-primary me-1"></i>Mensagem
-                        </label>
-                        <textarea class="form-control form-control-lg rounded-4 shadow-sm"
-                                  id="mensagem" rows="5" placeholder="Digite sua mensagem" required
-                                  style="background: #f5f8ff; border: 1.5px solid #2dbaee; resize: none;"></textarea>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow"
-                            style="background: linear-gradient(90deg, #18438f 60%, #0096df 100%); border: none;">
-                            <i class="fas fa-paper-plane me-2"></i>Enviar Mensagem
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-  <iframe  class="mt-lg-map2 mt-3" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5574.701785271798!2d13.484805034121734!3d-8.88801210685292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51ffa5169bed47%3A0x7ba0a99ba9f1be7!2sCentralidade%20do%20Sequele!5e0!3m2!1spt-PT!2sao!4v1747825486072!5m2!1spt-PT!2sao" width="800" height="650" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" frameborder="0"></iframe>
+
  <section id="rodape" class="container-fluid text-white py-4">
         <div class="container text-left">
 
@@ -68,7 +23,7 @@
       </div>
     </div>
     <div class="col-lg-4 col-md-4 col-12 d-flex justify-content-lg-end justify-content-center">
-      <img src="../assets/images/qr-instagram.png" alt="QR Code do Instagram" style="max-width: 160px; border-radius: 8px; box-shadow: 0 2px 8px #0002;">
+      <!--<img src="../assets/images/qr-instagram.png" alt="QR Code do Instagram" style="max-width: 160px; border-radius: 8px; box-shadow: 0 2px 8px #0002;">-->
     </div>
   </div>
 </footer>

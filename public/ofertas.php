@@ -1,4 +1,8 @@
 <?php 
+// Incluir arquivo de inicialização
+if (file_exists(__DIR__ . '/../templates/init.php')) {
+    include_once __DIR__ . '/../templates/init.php';
+}
 include_once '../templates/menu.php';
 ?>
 

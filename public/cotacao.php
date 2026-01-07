@@ -1,7 +1,10 @@
 <?php
-session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// Incluir arquivo de inicialização
+if (file_exists(__DIR__ . '/../templates/init.php')) {
+    include_once __DIR__ . '/../templates/init.php';
+} else {
+    session_start();
+}
 
 if (!isset($_SESSION['cotacao'])) {
     $_SESSION['cotacao'] = [];
@@ -31,9 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produto'])) {
     exit;
 }
 
-require_once __DIR__ .'/../vendor/autoload.php'; // PHPMailer via Composer
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+
 
 include_once '../templates/menu.php';
 ?>
@@ -103,64 +104,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'], $_POST['email
     if (empty($produtos) || !is_array($produtos)) $erros[] = "Nenhum produto selecionado.";
 
     if (empty($erros)) {
-        // Monta o corpo do e-mail com charset UTF-8 e prioridade alta
-        $body = "<h2 style='color:#18438f;'>Solicitação de Preço</h2>";
-        $body .= "<strong>Nome:</strong> " . htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') . "<br>";
-        $body .= "<strong>E-mail:</strong> " . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . "<br>";
-        $body .= "<strong>Telefone:</strong> " . htmlspecialchars($telefone, ENT_QUOTES, 'UTF-8') . "<br>";
-        $body .= "<strong>Mensagem:</strong> " . nl2br(htmlspecialchars($mensagem, ENT_QUOTES, 'UTF-8')) . "<br><br>";
-        $body .= "<h4 style='color:#0096df;'>Produtos Solicitados:</h4>";
-        $body .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse;'>";
-        $body .= "<tr><th>Categoria</th><th>ID</th><th>Nome</th><th>Potência/Capacidade</th></tr>";
-        foreach ($produtos as $p) {
-            $body .= "<tr>";
-            $body .= "<td style='text-align:center;'>" . htmlspecialchars(ucfirst($p['categoria'] ?? ''), ENT_QUOTES, 'UTF-8') . "</td>";
-            $body .= "<td style='text-align:center; font-weight:bold;'>" . htmlspecialchars($p['id'], ENT_QUOTES, 'UTF-8') . "</td>";
-            $body .= "<td>" . htmlspecialchars($p['nome'], ENT_QUOTES, 'UTF-8') . "</td>";
-            $body .= "<td>" . htmlspecialchars($p['capacidade'] ?? '', ENT_QUOTES, 'UTF-8') . "</td>";
-            $body .= "</tr>";
-        }
-        $body .= "</table>";
-
-        // --- CADASTRA NO BANCO ---
-        $mysqli = new mysqli('localhost', 'root', 'developer', 'loja');
-        if (!$mysqli->connect_errno) {
-            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-            $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-            $produtos_json = json_encode($produtos, JSON_UNESCAPED_UNICODE);
-            $stmt = $mysqli->prepare("INSERT INTO solicitacoes_cotacao (nome, email, telefone, mensagem, produtos_json, ip, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // --- SALVA NO BANCO DE DADOS ---
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $produtos_json = json_encode($produtos, JSON_UNESCAPED_UNICODE);
+        
+        $stmt = $conexao->prepare("INSERT INTO solicitacoes_cotacao (nome, email, telefone, mensagem, produtos_json, ip, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        
+        if ($stmt) {
             $stmt->bind_param('sssssss', $nome, $email, $telefone, $mensagem, $produtos_json, $ip, $user_agent);
-            $stmt->execute();
+            
+            if ($stmt->execute()) {
+                echo "<div class='alert alert-success text-center mt-4'>
+                    <i class='fas fa-check-circle me-2'></i>
+                    Solicitação de cotação registrada com sucesso! 
+                    <br><small class='text-muted'>Nossa equipe analisará e entrará em contato em breve.</small>
+                </div>";
+            } else {
+                echo "<div class='alert alert-danger text-center mt-4'>Erro ao registrar solicitação: " . htmlspecialchars($stmt->error) . "</div>";
+            }
             $stmt->close();
-            $mysqli->close();
-        }
-
-        $mail = new PHPMailer(true);
-        try {
-            $mail->CharSet = 'UTF-8';
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'alexarcanjo515@gmail.com';
-            $mail->Password = 'ypia sbps ytni ezru '; 
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            $mail->setFrom('alexarcanjo515@gmail.com', 'SOLLAYS - Solicitação');
-            $mail->addAddress('alexarcanjo515@gmail.com');
-            $mail->addReplyTo($email, $nome);
-
-            $mail->isHTML(true);
-            $mail->Subject = '!!! [IMPORTANTE] Nova Solicitação de preço';
-            $mail->Body = $body;
-            $mail->Priority = 1;
-            $mail->AddCustomHeader("X-MSMail-Priority: High");
-            $mail->AddCustomHeader("Importance: High");
-
-            $mail->send();
-            echo "<div class='alert alert-success text-center mt-4'>Solicitação enviada com sucesso! Em breve entraremos em contato.</div>";
-        } catch (Exception $e) {
-            echo "<div class='alert alert-danger text-center mt-4'>Erro ao enviar e-mail: {$mail->ErrorInfo}</div>";
+        } else {
+            echo "<div class='alert alert-danger text-center mt-4'>Erro ao preparar consulta: " . htmlspecialchars($conexao->error) . "</div>";
         }
     } else {
         echo "<div class='alert alert-danger text-center mt-4'>" . implode("<br>", $erros) . "</div>";

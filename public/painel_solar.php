@@ -1,9 +1,10 @@
 <?php
-session_start();
-
-// Simulação de login (remova em produção)
-$_SESSION['usuario_id'] = 1; // Simule um usuário logado para testar
-$_SESSION['usuario_email'] = 'cliente@exemplo.com'; // Simule um email de usuário logado
+// Incluir arquivo de inicialização
+if (file_exists(__DIR__ . '/../templates/init.php')) {
+    include_once __DIR__ . '/../templates/init.php';
+} else {
+    session_start();
+}
 
 // Exemplo de produtos
 $produtos = [
@@ -213,10 +214,11 @@ include_once '../templates/menu.php';
         <h5 class="modal-title" id="modalSolicitarPrecoLabel"><i class="fas fa-tag me-2"></i>Solicitar Preço</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-      <form id="formSolicitarPreco" method="post" action="solicitar_preco.php">
+      <form id="formSolicitarPreco" method="post" action="#">
         <div class="modal-body">
-          <?php if (isset($_SESSION['usuario_id'])): ?>
+          <?php if ($usuario_logado): ?>
             <input type="hidden" name="produto_id" id="produtoIdInput">
+            <input type="hidden" name="usuario_id" value="<?php echo $usuario_id; ?>">
             <div class="mb-3">
               <label for="mensagem" class="form-label">Mensagem (opcional):</label>
               <textarea class="form-control" name="mensagem" id="mensagem" rows="3" placeholder="Deseja informar algo?"></textarea>
@@ -227,7 +229,7 @@ include_once '../templates/menu.php';
             </div>
           <?php endif; ?>
         </div>
-        <?php if (isset($_SESSION['usuario_id'])): ?>
+        <?php if ($usuario_logado): ?>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary rounded-pill fw-bold">
             <i class="fas fa-paper-plane me-1"></i> Enviar Solicitação
@@ -337,79 +339,87 @@ include_once '../templates/menu.php';
 }
 </style>
 
-<!-- Certifique-se de que o Bootstrap JS está incluído antes do seu script customizado -->
-
 <script>
-// Usando apenas Bootstrap e classes JS para abrir os modais
-document.querySelectorAll('.painel-preco-btn, .destaque-preco-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        var isLogged = <?php echo isset($_SESSION['usuario_id']) ? 'true' : 'false'; ?>;
-        if (!isLogged) {
-            // Mostra modal de falha
-            var modalFalha = new bootstrap.Modal(document.getElementById('modalFalha'));
-            modalFalha.show();
-        } else {
-            // Preenche o produto_id e mostra modal de solicitação
-            document.getElementById('produtoIdInput').value = this.dataset.produto;
-            var modalSolicitar = new bootstrap.Modal(document.getElementById('modalSolicitarPreco'));
-            modalSolicitar.show();
-        }
+// Aguardar o DOM estar pronto
+document.addEventListener('DOMContentLoaded', function() {
+    // Usando apenas Bootstrap e classes JS para abrir os modais
+    document.querySelectorAll('.painel-preco-btn, .destaque-preco-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var isLogged = <?php echo $usuario_logado ? 'true' : 'false'; ?>;
+            if (!isLogged) {
+                // Mostra modal de falha
+                var modalFalha = new bootstrap.Modal(document.getElementById('modalFalha'));
+                modalFalha.show();
+            } else {
+                // Preenche o produto_id e mostra modal de solicitação
+                document.getElementById('produtoIdInput').value = this.dataset.produto;
+                var modalSolicitar = new bootstrap.Modal(document.getElementById('modalSolicitarPreco'));
+                modalSolicitar.show();
+            }
+        });
     });
-});
 
-// Envio do formulário via AJAX (apenas se logado)
-<?php if (isset($_SESSION['usuario_id'])): ?>
-document.getElementById('formSolicitarPreco').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var produto_id = document.getElementById('produtoIdInput').value;
-    var mensagem = document.getElementById('mensagem').value;
-    fetch('solicitar_preco_ajax.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'produto_id=' + encodeURIComponent(produto_id) + '&mensagem=' + encodeURIComponent(mensagem)
-    })
-    .then(response => response.json())
-    .then(data => {
-        var modalSolicitar = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarPreco'));
-        if (modalSolicitar) modalSolicitar.hide();
-        if(data.sucesso){
-            var modalSucesso = new bootstrap.Modal(document.getElementById('modalSucesso'));
-            modalSucesso.show();
-        } else {
-            var modalFalha = new bootstrap.Modal(document.getElementById('modalFalha'));
-            modalFalha.show();
-        }
-    })
-    .catch(() => {
-        var modalSolicitar = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarPreco'));
-        if (modalSolicitar) modalSolicitar.hide();
-        var modalFalha = new bootstrap.Modal(document.getElementById('modalFalha'));
-        modalFalha.show();
-    });
-});
-<?php endif; ?>
+    // Envio do formulário via AJAX (apenas se logado)
+    <?php if ($usuario_logado): ?>
+    var formSolicitar = document.getElementById('formSolicitarPreco');
+    if (formSolicitar) {
+        formSolicitar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var produto_id = document.getElementById('produtoIdInput').value;
+            var mensagem = document.getElementById('mensagem').value;
+            
+            fetch('solicitar_preco_ajax.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'produto_id=' + encodeURIComponent(produto_id) + '&mensagem=' + encodeURIComponent(mensagem)
+            })
+            .then(response => response.json())
+            .then(data => {
+                var modalSolicitar = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarPreco'));
+                if (modalSolicitar) modalSolicitar.hide();
+                if(data.sucesso){
+                    var modalSucesso = new bootstrap.Modal(document.getElementById('modalSucesso'));
+                    modalSucesso.show();
+                    // Limpar mensagem
+                    document.getElementById('mensagem').value = '';
+                } else {
+                    var modalFalha = new bootstrap.Modal(document.getElementById('modalFalha'));
+                    modalFalha.show();
+                }
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+                var modalSolicitar = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarPreco'));
+                if (modalSolicitar) modalSolicitar.hide();
+                var modalFalha = new bootstrap.Modal(document.getElementById('modalFalha'));
+                modalFalha.show();
+            });
+        });
+    }
+    <?php endif; ?>
 
-// Adicionar produto à cotação no localStorage
-document.querySelectorAll('.adicionar-cotacao-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const produto = {
-            id: this.dataset.produtoId,
-            categoria: this.dataset.produtoCategoria,
-            nome: this.dataset.produtoNome,
-            img: this.dataset.produtoImg,
-            capacidade: this.dataset.produtoCapacidade
-        };
-        let cotacao = JSON.parse(localStorage.getItem('cotacao')) || [];
-        // Evita duplicidade por id + categoria
-        if (!cotacao.some(item => item.id == produto.id && item.categoria == produto.categoria)) {
-            cotacao.push(produto);
-            localStorage.setItem('cotacao', JSON.stringify(cotacao));
-            alert('Produto adicionado à cotação!');
-        } else {
-            alert('Produto já está na cotação.');
-        }
+    // Adicionar produto à cotação no localStorage
+    document.querySelectorAll('.adicionar-cotacao-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const produto = {
+                id: this.dataset.produtoId,
+                categoria: this.dataset.produtoCategoria,
+                nome: this.dataset.produtoNome,
+                img: this.dataset.produtoImg,
+                capacidade: this.dataset.produtoCapacidade
+            };
+            let cotacao = JSON.parse(localStorage.getItem('cotacao')) || [];
+            // Evita duplicidade por id + categoria
+            if (!cotacao.some(item => item.id == produto.id && item.categoria == produto.categoria)) {
+                cotacao.push(produto);
+                localStorage.setItem('cotacao', JSON.stringify(cotacao));
+                alert('Produto adicionado à cotação!');
+            } else {
+                alert('Produto já está na cotação.');
+            }
+        });
     });
 });
 </script>

@@ -2,21 +2,413 @@
 include_once '../templates/menu.php';
 ?>
 
+<style>
+    /* Melhorias de Animações e Transições */
+    :root {
+        --primary-gradient: linear-gradient(90deg, #18438f 40%, #0096df 60%);
+        --secondary-gradient: linear-gradient(90deg, #18438f 50%, #0096df 60%);
+        --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Animações Avançadas */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(60px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeInGlow {
+        from {
+            opacity: 0;
+            filter: blur(10px);
+        }
+        to {
+            opacity: 1;
+            filter: blur(0);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -1000px 0;
+        }
+        100% {
+            background-position: 1000px 0;
+        }
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(24, 67, 143, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 0 10px rgba(24, 67, 143, 0);
+        }
+    }
+
+    /* Classes Utilitárias de Animação */
+    .animate-slide-up {
+        animation: slideInUp 0.8s ease-out;
+    }
+
+    .animate-slide-down {
+        animation: slideInDown 0.8s ease-out;
+    }
+
+    .animate-slide-left {
+        animation: slideInLeft 0.8s ease-out;
+    }
+
+    .animate-slide-right {
+        animation: slideInRight 0.8s ease-out;
+    }
+
+    .animate-scale {
+        animation: scaleIn 0.6s ease-out;
+    }
+
+    .animate-glow {
+        animation: fadeInGlow 1s ease-out;
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-pulse {
+        animation: pulse-glow 2s infinite;
+    }
+
+    /* Hover Effects Melhorados */
+    .hover-scale {
+        transition: var(--transition-smooth);
+    }
+
+    .hover-scale:hover {
+        transform: scale(1.05);
+    }
+
+    .hover-lift {
+        transition: var(--transition-smooth);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(24, 67, 143, 0.2);
+    }
+
+    .hover-gradient {
+        background: linear-gradient(90deg, #18438f, #0096df, #18438f);
+        background-size: 200% 200%;
+        transition: var(--transition-smooth);
+    }
+
+    .hover-gradient:hover {
+        background-position: right center;
+    }
+
+    /* Melhoria de Cards */
+    .feature-card {
+        border: 2px solid transparent;
+        background: linear-gradient(#fff, #fff) padding-box,
+                    linear-gradient(135deg, #18438f, #0096df) border-box;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: var(--transition-smooth);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(24, 67, 143, 0.15);
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: var(--transition-smooth);
+    }
+
+    .feature-card:hover::before {
+        left: 100%;
+    }
+
+    /* Seções com Background */
+    .section-divider {
+        margin: 40px 0;
+        position: relative;
+    }
+
+    .section-divider::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #18438f, transparent);
+    }
+
+    /* Tabelas Melhoradas */
+    .table-enhanced {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-enhanced thead th {
+        background: var(--primary-gradient);
+        color: white;
+        font-weight: 600;
+        padding: 16px;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table-enhanced tbody td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #e0e0e0;
+        transition: var(--transition-smooth);
+    }
+
+    .table-enhanced tbody tr:hover {
+        background-color: #f5f5ff;
+        box-shadow: inset 0 0 15px rgba(24, 67, 143, 0.05);
+    }
+
+    .table-enhanced tbody tr:last-child td {
+        border-bottom: 2px solid #18438f;
+    }
+
+    /* Buttons Melhorados */
+    .btn-enhanced {
+        border: none;
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-enhanced::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: var(--transition-smooth);
+    }
+
+    .btn-enhanced:hover::before {
+        left: 100%;
+    }
+
+    .btn-enhanced:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(24, 67, 143, 0.3);
+    }
+
+    /* Responsividade Melhorada */
+    @media (max-width: 768px) {
+        .section-mobile-stack {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+
+        .table-enhanced thead th {
+            padding: 12px;
+            font-size: 0.8rem;
+        }
+
+        .table-enhanced tbody td {
+            padding: 10px;
+        }
+
+        .animate-slide-left {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .animate-slide-right {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        h1 {
+            font-size: 1.5rem !important;
+        }
+
+        .btn-enhanced {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .feature-card {
+            border-radius: 12px;
+        }
+
+        .table-enhanced {
+            font-size: 0.85rem;
+        }
+
+        h1 {
+            font-size: 1.3rem !important;
+        }
+
+        p {
+            font-size: 0.95rem;
+        }
+
+        .py-5 {
+            padding: 2rem 0 !important;
+        }
+    }
+
+    /* Efeito Parallax Leve */
+    .parallax-light {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    /* Melhoria de Imagens */
+    .img-hover-zoom {
+        transition: var(--transition-smooth);
+    }
+
+    .img-hover-zoom:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+
+    /* Sombras Melhoradas */
+    .shadow-enhanced {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .shadow-lg-enhanced {
+        box-shadow: 0 20px 50px rgba(24, 67, 143, 0.15);
+    }
+
+    /* Gradientes Adicionais */
+    .gradient-text-primary {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Ícones com Animação */
+    .icon-animated {
+        transition: var(--transition-smooth);
+        display: inline-block;
+    }
+
+    .icon-animated:hover {
+        transform: rotate(10deg) scale(1.2);
+        color: #0096df;
+    }
+
+    /* Links Melhorados */
+    a {
+        transition: var(--transition-smooth);
+    }
+
+    .link-hover:hover {
+        color: #0096df !important;
+        text-decoration: underline;
+    }
+</style>
+
     <!-- Conteúdo principal virá aqui -->
     <br>
-    <section class="container-fluid px-0">
-        <div class="row g-0 align-items-center" style="min-height: 420px;">
+    <section class="container-fluid px-0 animate-slide-up">
+        <div class="row g-0 align-items-center section-mobile-stack" style="min-height: 420px;">
             <div class="col-lg-5 col-12 d-flex flex-column justify-content-center align-items-center p-4 p-lg-5 mt-lg-map"
                 data-aos="fade-right">
-                <img src="../assets/images/mapa.png" class="img-fluid mb-4 w-100"
+                <img src="../assets/images/mapa.png" class="img-fluid mb-4 w-100 img-hover-zoom animate-float"
                     style="object-fit: contain;" data-aos="zoom-in">
-                <h1 class="fw-bold mb-3 text-left text-lg-start"
-                    style="font-size: 2rem; background: linear-gradient(90deg, #18438f 40%, #0096df 60%);
-                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;"
+                <h1 class="fw-bold mb-3 text-left text-lg-start gradient-text-primary animate-slide-down"
+                    style="font-size: 2rem;"
                     data-aos="fade-up">
                     SOBRE NÓS
                 </h1>
-                <p class="mb-2 mt-3 text-black text-justify" style="font-size: 1.1rem; text-align: justify;"
+                <p class="mb-2 mt-3 text-black text-justify animate-slide-up" style="font-size: 1.1rem; text-align: justify; animation-delay: 0.1s;"
                     data-aos="fade-up" data-aos-delay="200">
                     S.R. ENERGY foi fundada com a visão de fornecer soluções solares completas e energeticamente eficientes em
                     África e na Europa.<br>
@@ -28,41 +420,40 @@ include_once '../templates/menu.php';
                     embalagens e estações de energia.
                 </p>
                 <br>
-                <div class="container">
-                    <span><i class="fas fa-map-marker-alt"></i> Município de Viana do Alentejo, 7090-237 </span><br>
-                    <span><i class="fas fa-map-marker-alt"></i> Rua S/N, Nova centralidade de Sequele, Município do
+                <div class="container animate-slide-up" style="animation-delay: 0.2s;">
+                    <span class="icon-animated"><i class="fas fa-map-marker-alt"></i> Município de Viana do Alentejo, 7090-237 </span><br>
+                    <span class="icon-animated"><i class="fas fa-map-marker-alt"></i> Rua S/N, Nova centralidade de Sequele, Município do
                         Cacuaco,
                         Província do Icolo e Bengo, Angola. </span><br>
-                    <span><i class="fas fa-map-marker-alt"></i> Outlets shopping: A2-09, Avenida Fidel De CASTRO RUZ, Nº
+                    <span class="icon-animated"><i class="fas fa-map-marker-alt"></i> Outlets shopping: A2-09, Avenida Fidel De CASTRO RUZ, Nº
                         S/N,
                         VIANA - LUANDA </span><br>
-                    <span><i class="fas fa-phone"></i> (11) 99999-9999</span>
+                    <span class="icon-animated"><i class="fas fa-phone"></i> (11) 99999-9999</span>
                 </div>
             </div>
-            <div class="col-lg-6 col-12 d-flex flex-column align-items-center justify-content-center p-4 p-lg-5"
+            <div class="col-lg-6 col-12 d-flex flex-column align-items-center justify-content-center p-4 p-lg-5 animate-slide-left"
                 data-aos="fade-left">
-                <h1 class="fw-bold mb-3 text-center text-lg-start"
-                    style="font-size: 2rem; background: linear-gradient(90deg, #18438f 50%, #0096df 60%);
-                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;"
+                <h1 class="fw-bold mb-3 text-center text-lg-start gradient-text-primary animate-slide-down"
+                    style="font-size: 2rem;"
                     data-aos="fade-up">
                     CONTEÚDO
                 </h1>
-                <div class="w-100 mb-3" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="../assets/images/Artboard 1.png" alt="" class="img-fluid w-80 mb-3 rounded">
-                    <img src="../assets/images/Artboard 2.png" alt="" class="img-fluid w-80 mb-3 rounded">
-                    <img src="../assets/images/Artboard 3.png" alt="" class="img-fluid w-80 mb-3 rounded">
+                <div class="w-100 mb-3 animate-scale" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="../assets/images/Artboard 1.png" alt="Artboard 1" class="img-fluid w-80 mb-3 rounded img-hover-zoom shadow-enhanced">
+                    <img src="../assets/images/Artboard 2.png" alt="Artboard 2" class="img-fluid w-80 mb-3 rounded img-hover-zoom shadow-enhanced">
+                    <img src="../assets/images/Artboard 3.png" alt="Artboard 3" class="img-fluid w-80 mb-3 rounded img-hover-zoom shadow-enhanced">
                 </div>
             </div>
         </div>
     </section>
-    <section class="container-fluid py-5 mt-lg-np30  p-4 p-lg-0">
+    <section class="container-fluid py-5 mt-lg-np30 p-4 p-lg-0 section-divider">
 
-        <div class="d-flex justify-content-center align-items-center p-4 p-lg-0" style="min-height:120px;">
-            <img src="../assets/images/65.png" alt="Divisor" class="img-fluid w-100" style=" width:auto;">
+        <div class="d-flex justify-content-center align-items-center p-4 p-lg-0 animate-slide-up" style="min-height:120px;">
+            <img src="../assets/images/65.png" alt="Divisor" class="img-fluid w-100 img-hover-zoom" style=" width:auto;">
         </div>
     </section>
 
-    <section class="container-fluid px-0">
+    <section class="container-fluid px-0 animate-glow">
         <div class="row g-0 align-items-center mx-0" style="min-height: 420px;">
             <div class="col-lg-5 col-12 d-flex flex-column justify-content-center align-items-center p-4 p-lg-0"
                 data-aos="fade-right">
@@ -78,12 +469,12 @@ include_once '../templates/menu.php';
                     Características do Produto
                 </h1>
                 <div class="row row-cols-1 row-cols-md-2 g-4 w-100 mx-0">
-                    <div class="col d-flex flex-column align-items-center text-center" data-aos="fade-up"
-                        data-aos-delay="100">
-                        <img src="../assets/images/imgremoved2.png" alt="Garantia Anti-PID" class="img-fluid mb-2"
-                            style="max-height: 80px;">
-                        <div class="fw-semibold mb-1" style="font-size: 1rem;">Garantia Anti-PID</div>
-                        <p class="text-muted small" style="text-align: justify;">
+                    <div class=\"col d-flex flex-column align-items-center text-center feature-card p-4 hover-lift\" data-aos=\"fade-up\"
+                        data-aos-delay=\"100\">
+                        <img src=\"../assets/images/imgremoved2.png\" alt=\"Garantia Anti-PID\" class=\"img-fluid mb-2 icon-animated\"
+                            style=\"max-height: 80px;\">
+                        <div class=\"fw-semibold mb-1\" style=\"font-size: 1rem;\">Garantia Anti-PID</div>
+                        <p class=\"text-muted small\" style=\"text-align: justify;\">
                             A taxa de atenuação causada pelo fenômeno PID é minimizada por meio da melhor otimização da
                             tecnologia de produção e do controle de materiais.
                         </p>
@@ -305,13 +696,12 @@ Ver mais
     
 
 
-<section class="container-fluid py-5 mt-lg-np30 p-4 p-lg-0" >
+<section class="container-fluid py-5 mt-lg-np30 p-4 p-lg-0">
     <div class="row align-items-center">
         <div class="col-lg-5 col-12 d-flex flex-column justify-content-center align-items-center p-4 p-lg-0" data-aos="fade-right">
             <img src="../assets/images/pg4.png" class="img-fluid mb-4 w-100" style="object-fit: cover;" data-aos="zoom-in">
         </div>
         <div class="col-lg-7 col-12" data-aos="fade-left">
-          <br><br><br><br>
             <div class="table-responsive rounded-3">
                 <table cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
   <thead style="background-color: #cce5ff;">

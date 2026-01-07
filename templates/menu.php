@@ -1,3 +1,9 @@
+<?php
+// Incluir arquivo de inicialização
+if (file_exists(__DIR__ . '/init.php')) {
+    include_once __DIR__ . '/init.php';
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -65,7 +71,29 @@
                         <li class="nav-item">
                             <a class="nav-link" href="../public/contactos.php"><i class="fas fa-envelope"></i> Contato</a>
                         </li>
+
+                        <?php if ($usuario_logado): ?>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="usuarioDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i> <?php echo htmlspecialchars($usuario_nome); ?>
+                                </a>
+                                <ul class="dropdown-menu mt-0 border-0 rounded-30" aria-labelledby="usuarioDropdown">
+                                    <li><a class="dropdown-item" href="../public/minha_conta.php"><i class="fas fa-user"></i> Minha Conta</a></li>
+                                    <li><a class="dropdown-item" href="../public/index.php?logout=1"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+                                </ul>
+                            </li>
+                        <?php else: ?>
+                            <li class="nav-item">
+                                <a class="btn btn-primary nav-link" href="../public/login.php"><i class="fas fa-user"></i> Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-success nav-link ms-2" href="../public/register.php"><i class="fas fa-user-plus"></i> Registrar</a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
+
+                   
                 </div>
             </div>
         </nav>
